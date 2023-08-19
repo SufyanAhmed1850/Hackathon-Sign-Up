@@ -1,4 +1,4 @@
-import app from "../config.js";
+import app from "../config";
 import {
     getStorage,
     ref,
@@ -16,6 +16,7 @@ import {
 import {
     getFirestore,
     collection,
+    getDoc,
     getDocs,
     addDoc,
     deleteDoc,
@@ -27,20 +28,55 @@ const auth = getAuth();
 const db = getFirestore(app);
 const storage = getStorage(app);
 let uid = null;
-let user = null;
 onAuthStateChanged(auth, (user) => {
     if (user) {
         uid = user.uid;
-        user = user;
         console.log("Uid ==>", uid);
     } else {
         uid = null;
         console.log("User Signed Out");
     }
 });
+let userLocal = JSON.parse(localStorage.getItem("userDb"));
+let userNameElem = document.getElementById("userName");
+let userNameEdit = document.getElementById("userNameEdit");
+userNameEdit.textContent = userLocal.fullName;
+userName.textContent = userLocal.fullName;
+let user = JSON.parse(localStorage.getItem("user"));
+let userImg = document.getElementById("userImg");
+const docRef = doc(db, "users", user.uid);
+const docSnap = await getDoc(docRef);
+if (docSnap.exists()) {
+    const existingData = docSnap.data();
+    userImg.src = existingData.src;
+} else {
+    console.log("Document does not exist.");
+}
+
+const changeProfile = async (newSrc) => {
+    const docRef = doc(db, "blogs", user.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        const existingData = docSnap.data();
+        if (existingData.arr && Array.isArray(existingData.arr)) {
+            existingData.arr.forEach((item) => {
+                item.src = newSrc;
+            });
+            try {
+                await updateDoc(docRef, existingData);
+                console.log("Document updated successfully!");
+            } catch (error) {
+                console.error("Error updating document: ", error);
+            }
+        } else {
+            console.log("The 'arr' field is not an array or does not exist.");
+        }
+    } else {
+        console.log("Document does not exist.");
+    }
+};
 
 const inputFile = document.getElementById("imageInput");
-
 const uploadFile = (file) => {
     return new Promise((resolve, reject) => {
         const mountainsRef = ref(storage, `images/${uid}`);
@@ -76,31 +112,28 @@ inputFile.addEventListener("change", async (event) => {
     try {
         let file = event.target.files[0];
         const res = await uploadFile(file);
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const existingData = docSnap.data();
+            existingData.src = res;
+            try {
+                await updateDoc(docRef, existingData);
+                console.log("Document successfully updated!");
+                changeProfile(res);
+            } catch (error) {
+                console.error("Error updating document: ", error);
+            }
+        } else {
+            console.log("Document does not exist.");
+        }
         console.log("res-->", res);
-        let img = document.getElementById("img");
+        let img = document.getElementById("userImg");
         img.src = res;
     } catch (err) {
         console.log(err);
     }
 });
-
-// inputFile.addEventListener("change", async (event) => {
-//     try {
-//         if (!uid) {
-//             console.log("User is not authenticated.");
-//             return;
-//         }
-//         const file = event.target.files[0];
-//         if (file) {
-//             const storageRef = ref(storage, "images/" + uid);
-//             await uploadBytesResumable(storageRef, file);
-//             const imageURL = await getDownloadURL(storageRef);
-//             console.log("Image URL:", imageURL);
-//         }
-//     } catch (error) {
-//         console.error("Error:", error);
-//     }
-// });
 
 const updatePassBtn = document.getElementById("updatePassBtn");
 updatePassBtn.addEventListener("click", async () => {

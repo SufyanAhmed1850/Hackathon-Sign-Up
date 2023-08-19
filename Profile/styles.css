@@ -5,11 +5,11 @@
 }
 
 body {
-    background-color: #F8F9FA;
+    background-color: #f8f9fa;
 }
 
 .header-parent {
-    background-color: #7749F8;
+    background-color: #7749f8;
 }
 
 .header {
@@ -18,7 +18,7 @@ body {
     max-width: 1250px;
     width: 90%;
     margin: auto;
-    background-color: #7749F8;
+    background-color: #7749f8;
     color: white;
 }
 
@@ -26,7 +26,6 @@ body {
     display: flex;
     gap: 16px;
 }
-
 
 .dashboard {
     display: flex;
@@ -109,14 +108,19 @@ body {
 }
 
 .profile {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     max-width: 1250px;
     width: 90%;
 }
 
 .profile-img {
-    max-width: 300px;
-    width: 40%;
+    width: 250px;
     position: relative;
+    height: 250px;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .profile-img .pen {
@@ -150,4 +154,8 @@ img {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+}
+
+.p-img {
+    overflow: hidden;
 }
