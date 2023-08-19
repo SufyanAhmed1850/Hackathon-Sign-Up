@@ -1,5 +1,4 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+import app from "./config.js";
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -11,26 +10,15 @@ import {
     doc,
     setDoc,
 } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyCyNUQxYkKfIXhgHeVO7I85tngmyjM7XRo",
-    authDomain: "user-data-4b3a1.firebaseapp.com",
-    projectId: "user-data-4b3a1",
-    storageBucket: "user-data-4b3a1.appspot.com",
-    messagingSenderId: "276932204866",
-    appId: "1:276932204866:web:5952fe60377409d8de10db",
-};
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const auth = getAuth();
 const db = getFirestore(app);
+
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        // https://firebase.google.com/docs/reference/js/auth.user
+        window.location.replace("./Profile/profileChange.html");
         const uid = user.uid;
         console.log("Uid ==>", uid);
     } else {
@@ -89,10 +77,6 @@ let passwordInput = document.querySelectorAll(
 passwordInput.forEach(function (input) {
     input.nextElementSibling.addEventListener("click", togglePass);
 });
-
-// const registerUser = async () => {
-
-// };
 
 let form = document.getElementById("signUpForm");
 form.addEventListener("submit", async function (event) {
@@ -154,9 +138,9 @@ const loginUser = async () => {
             console.log(user);
         })
         .catch((error) => {
-            invalidUser.classList.remove("v-hidden");
             const errorCode = error.code;
             const errorMessage = error.message;
+            invalidUser.classList.remove("v-hidden");
             console.log(errorMessage);
             console.log(errorCode);
         });
@@ -164,71 +148,3 @@ const loginUser = async () => {
 
 let signInForm = document.getElementById("signInForm");
 signInForm.addEventListener("submit", loginUser);
-
-// let signInForm = document.getElementById("signInForm");
-// signInForm.addEventListener("keydown", (event) => {
-//     if (event.key === "Enter") {
-//         loginUser();
-//     }
-// });
-
-// window.showEmailWindow = (desc) => {
-//     let emailWindow = document.getElementById("emailWindow");
-//     let windowIcon = document.getElementById("windowIcon");
-//     let emailErrorDesc = document.getElementById("emailErrorDesc");
-//     let loginErrorDesc = document.getElementById("loginErrorDesc");
-//     let passError = document.getElementById("passError");
-//     let accCreated = document.getElementById("accCreated");
-//     windowIcon.src = "./assets/danger.png";
-//     passError.style.display = "none";
-//     accCreated.style.display = "none";
-//     emailWindow.style.display = "flex";
-//     gsap.fromTo(
-//         "#emailWindow",
-//         {
-//             y: -50,
-//             opacity: 0,
-//         },
-//         {
-//             y: 0,
-//             opacity: 1,
-//             ease: "power1.out",
-//             duration: 0.4,
-//         }
-//     );
-//     console.log(desc);
-//     if (desc === "emailErrorDesc") {
-//         emailErrorDesc.style.display = "block";
-//         loginErrorDesc.style.display = "none";
-//     } else if (desc === "wrong pass") {
-//         emailErrorDesc.style.display = "none";
-//         loginErrorDesc.style.display = "none";
-//         passError.style.display = "block";
-//     } else if (desc === "registered") {
-//         windowIcon.src = "./assets/check.svg";
-//         accCreated.style.display = "block";
-//         emailErrorDesc.style.display = "none";
-//         loginErrorDesc.style.display = "none";
-//     } else {
-//         emailErrorDesc.style.display = "none";
-//         loginErrorDesc.style.display = "block";
-//     }
-//     setTimeout(() => {
-//         gsap.fromTo(
-//             "#emailWindow",
-//             {
-//                 y: 0,
-//                 opacity: 1,
-//             },
-//             {
-//                 y: -50,
-//                 opacity: 0,
-//                 ease: "power1.out",
-//                 duration: 0.4,
-//                 onComplete: function () {
-//                     emailWindow.style.display = "none";
-//                 },
-//             }
-//         );
-//     }, 3500);
-// };
