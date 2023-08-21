@@ -1,8 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCtPWyKIRMJsfWsLmwwlsArGw9788eQ8Sg",
     authDomain: "hackathonsmit-ba16c.firebaseapp.com",
@@ -12,14 +9,13 @@ const firebaseConfig = {
     appId: "1:420550745532:web:772da6c2eb1e6442191fb9",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
 import {
     getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+
 import {
     getFirestore,
     doc,
@@ -27,7 +23,7 @@ import {
     getDoc,
 } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
-// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore(app);
 
@@ -97,7 +93,6 @@ form.addEventListener("submit", async function (event) {
         return;
     }
     newPassMatchError.classList.add("v-hidden");
-
     try {
         const userCredential = await createUserWithEmailAndPassword(
             auth,
@@ -118,11 +113,20 @@ form.addEventListener("submit", async function (event) {
         newEmail.value = "";
         newPassword.value = "";
         newConfirmPassword.value = "";
-        window.location.replace("./dashboard.html");
         const docRef = doc(db, "users", user.uid);
         const userdocSnap = await getDoc(docRef);
         const userData = userdocSnap.data();
-        localStorage.setItem("userDb", JSON.stringify(userData));
+        await onAuthStateChanged(auth, (user) => {
+            if (user) {
+                localStorage.setItem("userDb", JSON.stringify(userData));
+                localStorage.setItem("user", JSON.stringify(user));
+                const uid = user.uid;
+                console.log("Uid ==>", uid);
+            } else {
+                console.log("User Signed Out");
+            }
+        });
+        window.location.replace("./dashboard/dashboard.html");
     } catch (error) {
         console.log(error.code);
         if (error.code === "auth/email-already-in-use") {
@@ -145,10 +149,21 @@ const loginUser = async () => {
             const userdocSnap = await getDoc(docRef);
             if (userdocSnap.exists()) {
                 const userData = userdocSnap.data();
-                localStorage.setItem("userDb", JSON.stringify(userData));
+                await onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        localStorage.setItem(
+                            "userDb",
+                            JSON.stringify(userData)
+                        );
+                        localStorage.setItem("user", JSON.stringify(user));
+                        const uid = user.uid;
+                        console.log("Uid ==>", uid);
+                    } else {
+                        console.log("User Signed Out");
+                    }
+                });
+                window.location.replace("./dashboard/dashboard.html");
             }
-            // Redirect to dashboard.html after successful login
-            window.location.replace("./dashboard.html");
         })
         .catch((error) => {
             invalidUser.classList.remove("v-hidden");
@@ -161,15 +176,3 @@ const loginUser = async () => {
 
 let signInForm = document.getElementById("signInForm");
 signInForm.addEventListener("submit", loginUser);
-//End of Login
-
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // https://firebase.google.com/docs/reference/js/auth.user
-        localStorage.setItem("user", JSON.stringify(user));
-        const uid = user.uid;
-        console.log("Uid ==>", uid);
-    } else {
-        console.log("User Signed Out");
-    }
-});

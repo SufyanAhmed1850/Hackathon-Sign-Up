@@ -178,10 +178,9 @@ const signOutButton = document.getElementById("header-right-logout");
 signOutButton.addEventListener("click", async () => {
     try {
         await signOut(auth);
+        localStorage.clear();
+        window.location.replace("../index.html");
         console.log("User signed out successfully.");
-        if (!uid) {
-            window.location.replace("../index.html");
-        }
     } catch (error) {
         console.error("Error signing out:", error.message);
     }
