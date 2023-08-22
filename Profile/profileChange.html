@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Blogs</title>
-
     <link rel="stylesheet" href="./styles.css">
 </head>
 
@@ -45,13 +44,27 @@
                 <div class="profile-name-container">
                     <p id="userNameEdit"></p>
                 </div>
-                <div class="password-container">
+                <form id="updatePassForm" onsubmit="return false" class="password-container">
                     <h1>Password</h1>
-                    <input id="oldPass" type="password" placeholder="Old password">
-                    <input id="newPass" type="password" placeholder="New password">
-                    <input id="RepeatPass" type="password" placeholder="Repeat password">
-                    <button id="updatePassBtn">Update Password</button>
-                </div>
+                    <div class="input-fields">
+                        <div id="oldPass" class="password-input">
+                            <input id="newPassword" class="form-input" type="password" placeholder="Old Password"
+                                required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                            <img src="../assets/visible.svg" alt="eye">
+                        </div>
+                        <div class="password-input">
+                            <input id="newPass" class="form-input" type="password" placeholder="New Password" required
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                            <img src="../assets/visible.svg" alt="eye">
+                        </div>
+                        <div class="password-input">
+                            <input id="RepeatPass" class="form-input" type="password" placeholder="Repeat Password"
+                                required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                            <img src="../assets/visible.svg" alt="eye">
+                        </div>
+                        <button>Update Password</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

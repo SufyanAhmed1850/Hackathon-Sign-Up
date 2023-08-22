@@ -22,6 +22,10 @@ body {
     background-color: #f8f9fa;
 }
 
+.d-none {
+    display: none !important;
+}
+
 .header-parent {
     background-color: #4d47c3;
     padding: 1rem 0;
@@ -104,7 +108,7 @@ a {
     cursor: pointer;
     align-self: flex-start;
     padding: .75rem 2rem;
-    background-color: #7749f8;
+    background-color: #4d47c3;
     color: #FFFFFF;
     outline: none;
     border: none;
@@ -112,7 +116,7 @@ a {
 }
 
 .publish-button:hover {
-    background-color: #5e26f7;
+    background-color: #7749f8;
 }
 
 .publish-button:active {
@@ -168,13 +172,15 @@ button:active {
     gap: 24px;
 }
 
-.blog {
+.blog,
+.all-blogs-from-user-blog {
     display: flex;
     flex-direction: column;
     gap: 18px;
     background-color: white;
     padding: 1rem 1.5rem;
     border-radius: .5rem;
+    box-shadow: 0 3px 16px #0000001a;
 }
 
 .myblogs-main {
@@ -487,7 +493,7 @@ img {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 24px;
+    margin: 24px 0;
 }
 
 .all-blogs {
@@ -563,7 +569,6 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
-    filter: drop-shadow(0 0 8px #00000042);
     cursor: pointer;
 }
 
@@ -599,16 +604,50 @@ img {
 
 input,
 textarea {
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #A0A0A0;
+    padding: 20px 50px 20px 26px;
+    color: var(--clr-purple-100);
+    font-size: 0.9375rem;
+    width: 100%;
+    border-radius: 8px;
+    background: var(--clr-purple-50);
     outline: none;
-    border-radius: 0.25rem;
+    border: none;
     resize: none;
-    font-size: .9rem;
 }
 
 .w textarea {
     height: 200px;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+}
+
+.back-arrow {
+    width: 35px;
+}
+
+.from-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    background-color: #FFFFFF;
+    box-shadow: 0 3px 16px #0000001a;
+    border-radius: .5rem;
+    padding: 1rem;
+    gap: .5rem;
+}
+
+.from-user-img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 .spinner-bg {
@@ -655,6 +694,6 @@ textarea {
     }
 }
 
-.d-none {
-    display: none !important;
+#backToAllBtn {
+    cursor: pointer;
 }

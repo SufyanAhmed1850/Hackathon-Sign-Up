@@ -61,11 +61,11 @@ const togglePass = (event) => {
     let input = eye.previousElementSibling;
     if (input.type == "password") {
         input.type = "text";
-        eye.src = "./assets/invisible.svg";
+        eye.src = "../assets/invisible.svg";
         eye.previousElementSibling.focus();
     } else {
         input.type = "password";
-        eye.src = "./assets/visible.svg";
+        eye.src = "../assets/visible.svg";
         eye.previousElementSibling.focus();
     }
 };
@@ -126,7 +126,7 @@ form.addEventListener("submit", async function (event) {
                 console.log("User Signed Out");
             }
         });
-        window.location.replace("./dashboard/dashboard.html");
+        window.location.replace("../dashboard/dashboard.html");
     } catch (error) {
         console.log(error.code);
         if (error.code === "auth/email-already-in-use") {
@@ -162,7 +162,7 @@ const loginUser = async () => {
                         console.log("User Signed Out");
                     }
                 });
-                window.location.replace("./dashboard/dashboard.html");
+                window.location.replace("../dashboard/dashboard.html");
             }
         })
         .catch((error) => {

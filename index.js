@@ -7,7 +7,6 @@ const firebaseConfig = {
     messagingSenderId: "420550745532",
     appId: "1:420550745532:web:772da6c2eb1e6442191fb9",
 };
-
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -15,7 +14,6 @@ import {
     onAuthStateChanged,
     signOut,
 } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
-
 import {
     getFirestore,
     doc,
@@ -26,20 +24,15 @@ import {
     orderBy,
     query,
 } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore(app);
-let userLocal = JSON.parse(localStorage.getItem("userDb"));
-let userUIDLocal = JSON.parse(localStorage.getItem("user"));
-let headerRightLogin = document.getElementById("header-right-login");
-userLocal
-    ? (headerRightLogin.style.display = "none")
-    : (headerRightLogin.style.display = "block");
-let userNameElem = document.getElementById("userName");
-userNameElem.textContent = userLocal.fullName;
 
 let loader = document.querySelector("#loader");
+let userLocal = JSON.parse(localStorage.getItem("userDb"));
+if (!userLocal) {
+    localStorage.clear();
+}
 
 const renderBlogs = async () => {
     const myBlogs = query(

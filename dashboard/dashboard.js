@@ -281,7 +281,7 @@ signOutButton.addEventListener("click", async () => {
     try {
         await signOut(auth);
         localStorage.clear();
-        window.location.replace("../index.html");
+        window.location.replace("../");
         console.log("User signed out successfully.");
     } catch (error) {
         console.error("Error signing out:", error.message);

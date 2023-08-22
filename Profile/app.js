@@ -151,8 +151,8 @@ inputFile.addEventListener("change", async (event) => {
     }
 });
 
-const updatePassBtn = document.getElementById("updatePassBtn");
-updatePassBtn.addEventListener("click", async () => {
+const updatePassForm = document.getElementById("updatePassForm");
+updatePassForm.addEventListener("submit", async () => {
     const oldPassword = document.getElementById("oldPass").value;
     const newPassword = document.getElementById("newPass").value;
     const repeatPassword = document.getElementById("RepeatPass").value;
@@ -172,6 +172,25 @@ updatePassBtn.addEventListener("click", async () => {
     } catch (error) {
         console.error("Error updating password:", error.message);
     }
+});
+const togglePass = (event) => {
+    let eye = event.target;
+    let input = eye.previousElementSibling;
+    if (input.type == "password") {
+        input.type = "text";
+        eye.src = "../assets/invisible.svg";
+        eye.previousElementSibling.focus();
+    } else {
+        input.type = "password";
+        eye.src = "../assets/visible.svg";
+        eye.previousElementSibling.focus();
+    }
+};
+let passwordInput = document.querySelectorAll(
+    'input.form-input[type="password"]'
+);
+passwordInput.forEach((input) => {
+    input.nextElementSibling.addEventListener("click", togglePass);
 });
 
 const signOutButton = document.getElementById("header-right-logout");
