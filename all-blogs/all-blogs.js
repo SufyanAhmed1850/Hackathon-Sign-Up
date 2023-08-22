@@ -22,7 +22,6 @@ import {
     getDoc,
     collection,
     getDocs,
-    Timestamp,
 } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
 const app = initializeApp(firebaseConfig);
@@ -30,65 +29,54 @@ const auth = getAuth();
 const db = getFirestore(app);
 let userLocal = JSON.parse(localStorage.getItem("userDb"));
 let userUIDLocal = JSON.parse(localStorage.getItem("user"));
+let headerRightLogin = document.getElementById("header-right-login");
+userLocal
+    ? (headerRightLogin.style.display = "none")
+    : (headerRightLogin.style.display = "block");
+let userNameElem = document.getElementById("userName");
+userNameElem.textContent = userLocal.fullName;
 
-// Fetch all documents in the "blogs" collection
-const querySnapshot = await getDocs(collection(db, "blogs"));
+let loader = document.querySelector("#loader");
 
-querySnapshot.forEach((doc) => {
-    // Access each document's data
-    const blogData = doc.data();
-    // Process each document's data here
-    console.log("Document data:", blogData);
-    console.log(doc.data().arr);
-    // Assuming doc.data().arr is your array of objects
-    const arr = doc.data().arr;
-
-    // Get a reference to the parent div
-    const allBlogsChild = document.querySelector(".all-blogs-child");
-
-    // Loop through the array and append HTML elements for each object
-    arr.forEach((item) => {
-        const { text, fullName, title, date, userId, src } = item;
-
-        // Create a template literal with the HTML structure
+const renderBlogs = async () => {
+    const querySnapshot = await getDocs(collection(db, "blogs"));
+    querySnapshot.forEach((doc) => {
+        const blogData = doc.data();
+        console.log("Document data:", blogData);
+        const allBlogsChild = document.querySelector(".all-blogs-child");
+        const { text, fullName, title, date, userId, src } = blogData;
         const htmlTemplate = `
         <div class="all-blogs-blog">
-            <div class="all-blogs-blog-head">
-                <div class="all-blogs-blog-profile-image">
-                    <img src="${src}" alt="Profile Picture">
-                </div>
-                <div class="all-blogs-blog-title">
-                    <h2>${title}</h2>
-                    <p>${fullName}</p>
-                    <p>${date}</p>
-                </div>
+        <div class="all-blogs-blog-head">
+        <div class="all-blogs-blog-profile-image">
+        <img src="${src}" alt="Profile Picture">
+        </div>
+        <div class="all-blogs-blog-title">
+        <h2>${title}</h2>
+        <p>${fullName}</p>
+        <p>${date}</p>
+        </div>
             </div>
             <div class="all-blogs-blog-content">
                 <p>${text}</p>
-            </div>
-            <div class="blog-edit">
+                </div>
+                <div class="blog-edit">
                 <button id="${userId}" class="see-all">See all from this user</button>
-            </div>
-        </div>
-    `;
-
-        // Create a temporary div element to hold the template literal
+                </div>
+                </div>
+                `;
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = htmlTemplate;
-
-        // Append the template to the parent div
         allBlogsChild.appendChild(tempDiv.firstElementChild);
     });
-});
-
-// Greeting according to time of day
+    loader.classList.add("d-none");
+};
+renderBlogs();
 
 window.getGreeting = function () {
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
-
     let greeting = "";
-
     if (currentHour >= 5 && currentHour < 12) {
         greeting = "Good morning";
     } else if (currentHour >= 12 && currentHour < 18) {
@@ -96,14 +84,24 @@ window.getGreeting = function () {
     } else {
         greeting = "Good evening";
     }
-
     return greeting;
 };
-
 if (window.location.pathname === "/allblogs.html") {
     const greeting = getGreeting();
     console.log(`${greeting} Readers!`);
-
     let greetingHead = document.getElementById("greeting");
     greetingHead.textContent = greeting;
 }
+
+const signOutButton = document.getElementById("header-right-logout");
+
+signOutButton.addEventListener("click", async () => {
+    try {
+        await signOut(auth);
+        localStorage.clear();
+        window.location.replace("../index.html");
+        console.log("User signed out successfully.");
+    } catch (error) {
+        console.error("Error signing out:", error.message);
+    }
+});

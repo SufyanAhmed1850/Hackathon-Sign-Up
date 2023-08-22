@@ -31,62 +31,54 @@ const auth = getAuth();
 const db = getFirestore(app);
 let userLocal = JSON.parse(localStorage.getItem("userDb"));
 let userUIDLocal = JSON.parse(localStorage.getItem("user"));
-// Check if the current page is allfromuser.html
-if (window.location.href.endsWith("allfromuser.html")) {
-    // Retrieve the button ID from local storage
-    const buttonId = localStorage.getItem("buttonId");
+let userNameElem = document.getElementById("userName");
+userNameElem.textContent = userLocal.fullName;
+let headerRightLogin = document.getElementById("header-right-login");
+userLocal
+    ? (headerRightLogin.style.display = "none")
+    : (headerRightLogin.style.display = "block");
 
-    // Check if the button ID exists in local storage
-    if (buttonId) {
-        console.log("Button ID retrieved from local storage: " + buttonId);
-        // You can use the buttonId variable as needed
+// const docRef = doc(db, "blogs", buttonId);
+// const docSnap = await getDoc(docRef);
 
-        // Now fetch user data based on the retrieved uid
-        const docRef = doc(db, "blogs", buttonId);
-        const docSnap = await getDoc(docRef);
+// if (docSnap.exists()) {
+//     const userData = docSnap.data();
+//     arr = userData.arr; // Assuming 'userData.arr' is an array of blog data
+//     const blogsFromUser = document.querySelector(
+//         ".all-blogs-from-user-child"
+//     );
 
-        if (docSnap.exists()) {
-            const userData = docSnap.data();
-            arr = userData.arr; // Assuming 'userData.arr' is an array of blog data
-            const blogsFromUser = document.querySelector(
-                ".all-blogs-from-user-child"
-            );
+//     // Loop through each entry in the 'arr' array and create blog elements
+//     userData.arr.forEach((blogData) => {
+//         const { title, fullName, date, text, src } = blogData;
 
-            // Loop through each entry in the 'arr' array and create blog elements
-            userData.arr.forEach((blogData) => {
-                const { title, fullName, date, text, src } = blogData;
+//         // Create a new blog element
+//         const userBlog = document.createElement("div");
+//         userBlog.classList.add("all-blogs-from-user-blog");
+//         userBlog.innerHTML = `
+//             <div class="all-blogs-from-user-blog">
+//             <div class="all-blogs-from-user-blog-head">
+//                 <div class="all-blogs-from-user-blog-profile-image">
+//                     <img src="${src}" alt="Profile Picture">
+//                 </div>
+//                 <div class="all-blogs-from-user-blog-title">
+//                     <h2>${title}</h2>
+//                     <p>${fullName}</p>
+//                     <p>${date}</p>
+//                 </div>
+//             </div>
+//             <div class="all-blogs-from-user-blog-content">
+//                 <p>${text}</p>
+//             </div>
+//         </div>
+//             `;
 
-                // Create a new blog element
-                const userBlog = document.createElement("div");
-                userBlog.classList.add("all-blogs-from-user-blog");
-                userBlog.innerHTML = `
-                <div class="all-blogs-from-user-blog">
-                <div class="all-blogs-from-user-blog-head">
-                    <div class="all-blogs-from-user-blog-profile-image">
-                        <img src="${src}" alt="Profile Picture">
-                    </div>
-                    <div class="all-blogs-from-user-blog-title">
-                        <h2>${title}</h2>
-                        <p>${fullName}</p>
-                        <p>${date}</p>
-                    </div>
-                </div>
-                <div class="all-blogs-from-user-blog-content">
-                    <p>${text}</p>
-                </div>
-            </div>
-                `;
-
-                // Append the blog element to the parent container
-                blogsFromUser.appendChild(userBlog);
-            });
-        } else {
-            console.log("No such document!");
-        }
-    } else {
-        console.log("Button ID not found in local storage.");
-    }
-}
+//         // Append the blog element to the parent container
+//         blogsFromUser.appendChild(userBlog);
+//     });
+// } else {
+//     console.log("No such document!");
+// }
 
 // Get all the buttons with the class "see-all"
 const buttons = document.querySelectorAll(".see-all");

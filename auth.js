@@ -105,7 +105,7 @@ form.addEventListener("submit", async function (event) {
             lastName: newLastName.value,
             fullName: newFirstName.value + " " + newLastName.value,
             joined: currentDate,
-            src: "https://static.thenounproject.com/png/4035889-200.png",
+            src: "https://firebasestorage.googleapis.com/v0/b/hackathonsmit-ba16c.appspot.com/o/defaultImage%2Fprofile.svg?alt=media&token=6792b586-b985-4441-ad7b-0be57f65f9a5",
         });
         console.log(user);
         newFirstName.value = "";
